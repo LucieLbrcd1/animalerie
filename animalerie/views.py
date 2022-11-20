@@ -18,86 +18,86 @@ def animal_detail(request, id_animal):
     nid = get_object_or_404(Equipement, id_equip='nid')
     litiere = get_object_or_404(Equipement, id_equip='litiere')
     animal = get_object_or_404(Animal, id_animal=id_animal)
-    ancien_lieu = get_object_or_404(Equipement, id_equip=animal.lieu)
+    formerlieu = get_object_or_404(Equipement, id_equip=animal.lieu)
     if request.method == "POST":
         form = MoveForm(request.POST, instance=animal)
         if form.is_valid():
             if form.data['lieu'] == 'mangeoire':
                 if mangeoire.disponibilite == 'occupe':
-                    return render(request ,"animalerie/animal_detail.html", {'animal': animal, 'message': "Desole, la mangeoire est occupe" , 'equipements': equipements})
+                    return render(request ,"animalerie/animal_detail.html", {'animal': animal, 'message': "Impossible , la mangeoire est déjà occupé !" , 'equipements': equipements})
                 elif animal.etat == 'affame' and mangeoire.disponibilite == 'libre':
-                    ancien_lieu.disponibilite = "libre"
-                    ancien_lieu.save()
+                    formerlieu.disponibilite = "libre"
+                    formerlieu.save()
                     animal.etat = 'repus'
                     form.save()                  
-                    nouveau_lieu = get_object_or_404(Equipement, id_equip=animal.lieu)
-                    nouveau_lieu.disponibilite = "occupe"
-                    nouveau_lieu.save()
+                    newlieu = get_object_or_404(Equipement, id_equip=animal.lieu)
+                    newlieu.disponibilite = "occupe"
+                    new.save()
                     animal.save()
                     return redirect('animal_list')      
                 else:
-                    if ancien_lieu!= litiere:
-                        ancien_lieu.disponibilite = "occupe"
-                        ancien_lieu.save()
+                    if formerlieu!= litiere:
+                        formerlieu.disponibilite = "occupe"
+                        formerlieu.save()
                         form.save(commit=False)
-                    return render(request ,"animalerie/animal_detail.html", {'animal': animal, 'message': f"Desole {animal} n'est pas affame",'equipements': equipements})    
+                    return render(request ,"animalerie/animal_detail.html", {'animal': animal, 'message': f"Malheureusement {animal} n'a pas faim !",'equipements': equipements})    
             elif form.data['lieu'] == 'roue':
                 if roue.disponibilite == 'occupe':
-                    return render(request ,"animalerie/animal_detail.html", {'animal': animal, 'message': f"Desole, la roue est occupe",'equipements': equipements})            
+                    return render(request ,"animalerie/animal_detail.html", {'animal': animal, 'message': f"Impossible , la roue est déjà occupé !",'equipements': equipements})            
                 elif animal.etat == 'repus' and roue.disponibilite == 'libre':
-                    ancien_lieu.disponibilite = "libre"
-                    ancien_lieu.save()
+                    formerlieu.disponibilite = "libre"
+                    formerlieu.save()
                     animal.etat = 'fatigue'
                     form.save()
-                    nouveau_lieu = get_object_or_404(Equipement, id_equip=animal.lieu)
-                    nouveau_lieu.disponibilite = "occupe"
-                    nouveau_lieu.save()
+                    newlieu = get_object_or_404(Equipement, id_equip=animal.lieu)
+                    newlieu.disponibilite = "occupe"
+                    newlieu.save()
                     animal.save()
                     return redirect('animal_list')   
                 else:
-                    if ancien_lieu!= litiere:
-                        ancien_lieu.disponibilite = "occupe"
-                        ancien_lieu.save()
+                    if formerlieu!= litiere:
+                        formerlieu.disponibilite = "occupe"
+                        formerlieu.save()
                         form.save(commit=False)
-                    return render(request ,"animalerie/animal_detail.html", {'animal': animal, 'message': f"Desole {animal} n'est pas repus",'equipements': equipements})
+                    return render(request ,"animalerie/animal_detail.html", {'animal': animal, 'message': f"Malheureusement {animal} n'a pas assez mangé !",'equipements': equipements})
             elif form.data['lieu'] == 'nid':
                 if nid.disponibilite == 'occupe':
-                    return render(request ,"animalerie/animal_detail.html", {'animal': animal, 'message': f"Desole, le nid est occupe",'equipements': equipements})            
+                    return render(request ,"animalerie/animal_detail.html", {'animal': animal, 'message': f"Impossible , le nid est déjà occupé !",'equipements': equipements})            
                 elif animal.etat == 'fatigue' and nid.disponibilite == 'libre':
-                    ancien_lieu.disponibilite = "libre"
-                    ancien_lieu.save()
+                    formerlieu.disponibilite = "libre"
+                    formerlieu.save()
                     animal.etat = 'endormi'
                     form.save()
-                    nouveau_lieu = get_object_or_404(Equipement, id_equip=animal.lieu)
-                    nouveau_lieu.disponibilite = "occupe"
-                    nouveau_lieu.save()
+                    formerlieu = get_object_or_404(Equipement, id_equip=animal.lieu)
+                    newlieu.disponibilite = "occupe"
+                    newlieu.save()
                     animal.save()
                     return redirect('animal_list')                       
                 else:
-                    if ancien_lieu!= litiere:
-                        ancien_lieu.disponibilite = "occupe"
-                        ancien_lieu.save()
+                    if formerlieu!= litiere:
+                        formerlieu.disponibilite = "occupe"
+                        formerlieu.save()
                         form.save(commit=False)
-                    return render(request ,"animalerie/animal_detail.html", {'animal': animal, 'message': f"Desole {animal} n'est pas fatigue",'equipements': equipements})
+                    return render(request ,"animalerie/animal_detail.html", {'animal': animal, 'message': f"Malheureusement {animal} n'est pas fatigué !",'equipements': equipements})
             elif form.data['lieu'] == 'litiere':
                 if litiere.disponibilite == 'occupe':
-                    return render(request ,"animalerie/animal_detail.html", {'animal': animal, 'message': f"Desole, la litiere est occupe",'equipements': equipements})              
+                    return render(request ,"animalerie/animal_detail.html", {'animal': animal, 'message': f"Impossible , la litière est déjà occupé !",'equipements': equipements})              
                 elif animal.etat == 'endormi' and litiere.disponibilite == 'libre':
-                    ancien_lieu.disponibilite = "libre"
-                    ancien_lieu.save()
+                    former.disponibilite = "libre"
+                    former.save()
                     animal.etat = 'affame'
                     form.save()
-                    nouveau_lieu = get_object_or_404(Equipement, id_equip=animal.lieu)
-                    nouveau_lieu.disponibilite = "libre"
-                    nouveau_lieu.save()
+                    newlieu = get_object_or_404(Equipement, id_equip=animal.lieu)
+                    newlieu.disponibilite = "libre"
+                    newlieu.save()
                     animal.save()
                     return redirect('animal_list')                      
                 else:
-                    if ancien_lieu!= litiere:
-                        ancien_lieu.disponibilite = "occupe"
-                        ancien_lieu.save()
+                    if formerlieu!= litiere:
+                        formerlieu.disponibilite = "occupe"
+                        formerlieu.save()
                         form.save(commit=False)
-                    return render(request ,"animalerie/animal_detail.html", {'animal': animal, 'message': f"Desole {animal} n'est pas endormi",'equipements': equipements})
+                    return render(request ,"animalerie/animal_detail.html", {'animal': animal, 'message': f"Malheureusement {animal} ne dors pas !",'equipements': equipements})
 
         else:
             form = MoveForm()
